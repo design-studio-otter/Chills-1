@@ -12,9 +12,10 @@ void setup() {
     pinMode(in1, OUTPUT);
     pinMode(in2, OUTPUT);
 
-    // pinMode(enB, OUTPUT);
-    // pinMode(in3, OUTPUT);
-    // pinMode(in4, OUTPUT);
+    pinMode(enB, OUTPUT);
+    pinMode(in3, OUTPUT);
+    pinMode(in4, OUTPUT);
+
 }
 
 // void TurnMotorA() {
@@ -33,9 +34,10 @@ void loop() {
     digitalWrite(in1, LOW);
     analogWrite(enA, 100);
 
-    // digitalWrite(in4, HIGH);
-    // digitalWrite(in3, LOW);
-    // analogWrite(enB, 200);
+    digitalWrite(in4, HIGH);
+    digitalWrite(in3, LOW);
+    analogWrite(enB, 200);
 
     delay(100);
+
 }
