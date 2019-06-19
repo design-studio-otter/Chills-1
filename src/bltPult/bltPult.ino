@@ -16,6 +16,7 @@ int LED = 13;
 
 void setup(){
   Bluetooth.begin(9600);
+  Bluetooth.println("Ожидание команды...");
   Serial.begin(9600);
   Serial.println("Ожидание команды...");
   pinMode(13, OUTPUT);
@@ -24,11 +25,12 @@ void setup(){
 void loop(){
   if (Bluetooth.available()){ // проверка наличия команд
     val = Bluetooth.read(); // чтение команды
-    Serial.println(val);
+    Serial.write(val);    
     if (val == 'u') { // проверка команды
         digitalWrite(LED, HIGH);
         delay(1000);
         digitalWrite(LED, LOW);
+        Bluetooth.println("up");
       } 
     
     else if (val == 'd') {
@@ -36,10 +38,17 @@ void loop(){
       delay(750);
       digitalWrite(LED, LOW);
       delay(750);
+      Bluetooth.println("down");
     }
     
-    if (val == 'o') {} 
-      // Комадны для выполнения
+    else if (val == 'r') { 
+      Bluetooth.println("right"); 
     }
-  
+    else if (val == 'l') {
+      Bluetooth.println("left");  
+    }
+    else if (val == 'w') {
+      Bluetooth.println("FIRE!!!");
+    }
+  } 
 }
