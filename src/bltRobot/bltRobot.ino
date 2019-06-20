@@ -6,6 +6,12 @@
 // s = start 
 // Обозначения для приложения пульта
 
+//
+// Мотор А - левое колесо
+// Мотор B - правое колесо
+
+
+
 #include <SoftwareSerial.h>
 
 SoftwareSerial Bluetooth(8, 7); // RX, TX 
@@ -88,30 +94,36 @@ void loop() {
    if (Bluetooth.available()){ // проверка наличия команд
     val = Bluetooth.read(); // чтение команды
     Serial.write(val);    
-    if (val == 'u') { // проверка команды
+    // проверка команды
+    if (val == 'u') { // движение вперед
+        // действия для выполнения
         turnForthMotorA();
         Bluetooth.println("up");
-        
       } 
     
-    else if (val == 'd') {
-      
+    else if (val == 'd') { // движение назад
+      turnBackMotorA();
+      turnBackMotorB();
       Bluetooth.println("down");
     }
     
-    else if (val == 'r') { 
-      
+    else if (val == 'r') { // движение направо
+
+      turnForthMotorA();
+      turnOffMotorB();
       Bluetooth.println("right"); 
     }
-    else if (val == 'l') {
-      
-      Bluetooth.println("left");  
+    else if (val == 'l') { // движение налево
+
+      turnForthMotorB();
+      turnOffMotorA();
+      Bluetooth.println("left"); 
     }
     else if (val == 'w') {
      
       Bluetooth.println("FIRE!!!");
     }
-    else if (val == 'o') {
+    else if (val == 'o') { // выключение всех моторов, остановка
       turnOffMotorA();
       turnOffMotorB();
       Bluetooth.println("Motors are stopped");
