@@ -14,19 +14,22 @@
 
 #include <SoftwareSerial.h>
 
-SoftwareSerial Bluetooth(8, 7); // RX, TX 
+SoftwareSerial Bluetooth(10, 11); // RX, TX 
 
 int val; // переменная для приема команды
 int LED = 13; // L-светодиод для свидетельства выполнения команд
 
+// инициализируем оружие
+
+int wn = 4;
 
 // Сопоставляем пины на Arduino с пинами на плате L298N.
-int in2 = 12;
-int in1 = 11;
+int in2 = 7;
+int in1 = 6;
 int enA = 3;
 
-int in4 = 10;
-int in3 = 9;
+int in4 = 9;
+int in3 = 8;
 int enB = 5;
 
 
@@ -45,6 +48,7 @@ void setup() {
   pinMode(enB, OUTPUT);
   pinMode(in3, OUTPUT);
   pinMode(in4, OUTPUT);
+  pinMode(wn, OUTPUT);
   pinMode(13, OUTPUT);
 }
 
@@ -89,7 +93,19 @@ void turnOffMotorB() {
     digitalWrite(in3, LOW);
 }
 
+// Включение оружия
+void weaponOn() {
+  digitalWrite(wn, HIGH);
+  delay(250);
+  digitalWrite(wn, LOW);
+  delay(250);
+}
 
+// Выключение оружия
+
+void weaponOff() {
+  digitalWrite(wn, LOW);  
+}
 void loop() {
    if (Bluetooth.available()){ // проверка наличия команд
     val = Bluetooth.read(); // чтение команды
@@ -120,8 +136,12 @@ void loop() {
       Bluetooth.println("left"); 
     }
     else if (val == 'w') {
-     
+      weaponOn();
       Bluetooth.println("FIRE!!!");
+    }
+    else if (val == 'v'){
+      weaponOff();
+      Bluetooth.println("Fire stop");  
     }
     else if (val == 'o') { // выключение всех моторов, остановка
       turnOffMotorA();
