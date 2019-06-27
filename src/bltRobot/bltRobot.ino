@@ -96,9 +96,6 @@ void turnOffMotorB() {
 // Включение оружия
 void weaponOn() {
   digitalWrite(wn, HIGH);
-  delay(250);
-  digitalWrite(wn, LOW);
-  delay(250);
 }
 
 // Выключение оружия
@@ -106,6 +103,7 @@ void weaponOn() {
 void weaponOff() {
   digitalWrite(wn, LOW);
 }
+
 void loop() {
    if (Bluetooth.available()){ // проверка наличия команд
     val = Bluetooth.read(); // чтение команды
