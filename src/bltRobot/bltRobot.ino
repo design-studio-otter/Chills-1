@@ -3,7 +3,7 @@
 // r = right
 // l = left
 // w = weapon
-// s = start 
+// s = start
 // Обозначения для приложения пульта
 
 //
@@ -14,7 +14,7 @@
 
 #include <SoftwareSerial.h>
 
-SoftwareSerial Bluetooth(10, 11); // RX, TX 
+SoftwareSerial Bluetooth(10, 11); // RX, TX
 
 int val; // переменная для приема команды
 int LED = 13; // L-светодиод для свидетельства выполнения команд
@@ -104,49 +104,79 @@ void weaponOn() {
 // Выключение оружия
 
 void weaponOff() {
-  digitalWrite(wn, LOW);  
+  digitalWrite(wn, LOW);
 }
 void loop() {
    if (Bluetooth.available()){ // проверка наличия команд
     val = Bluetooth.read(); // чтение команды
-    Serial.write(val);    
+    Serial.write(val);
     // проверка команды
     if (val == 'u') { // движение вперед
         // действия для выполнения
         turnForthMotorA();
-        Bluetooth.println("up");
-      } 
-    
+        Bluetooth.println("up"); // сообщение в Bluetooth порт для ручной проверки успешности выполнения
+        Serial.println("Движение вперед"); // сообщение в Serial порт компьюетра для ручной проверки успешности выполнения
+      }
+
     else if (val == 'd') { // движение назад
       turnBackMotorA();
       turnBackMotorB();
       Bluetooth.println("down");
+      Serial.println("Движение назад");
     }
-    
+
     else if (val == 'r') { // движение направо
 
       turnForthMotorA();
       turnOffMotorB();
-      Bluetooth.println("right"); 
+      Bluetooth.println("right");
+      Serial.println("Поворот направо");
     }
     else if (val == 'l') { // движение налево
 
       turnForthMotorB();
       turnOffMotorA();
-      Bluetooth.println("left"); 
+      Bluetooth.println("left");
+      Serial.println("Поворот налево");
     }
-    else if (val == 'w') {
+    else if (val == 'w') { // огонь.
       weaponOn();
-      Bluetooth.println("FIRE!!!");
+      Bluetooth.println("Огонь");
+      Serial.println("Огонь");
     }
-    else if (val == 'v'){
+    else if (val == '4'){ // окончание огня.
       weaponOff();
-      Bluetooth.println("Fire stop");  
+      Bluetooth.println("Огонь прекращен");
+      Serial.println("Огонь прекращен");
     }
-    else if (val == 'o') { // выключение всех моторов, остановка
+    else if (val == 'o') { // выключение всех моторов, остановка.
       turnOffMotorA();
       turnOffMotorB();
-      Bluetooth.println("Motors are stopped");
+      weaponOff();
+      Bluetooth.println("Все моторы остановлены");
+      Serial.println("Все моторы остановлены");
     }
-  } 
+
+    else if (val == '0') { // окончание движения вперед.
+      turnOffMotorA();
+      Bluetooth.println("Движение вперед закончено");
+      Serial.println("Движение вперед закончено");
+    }
+    else if (val == '1'){ // окончание поворота налево.
+      turnOffMotorB();
+      Bluetooth.println("ДВжиение налево закончено");
+      Serial.println("Движение налево закончено");
+    }
+    else if (val == '2'){ // окончание движения назад.
+      turnOffMotorA();
+      turnOffMotorB();
+      Bluetooth.println("Двжиение назад закончено");
+      Serial.println("Движение назад закончено");
+    }
+    else if (val == '3'){ // окончание поворота направо.
+      turnOffMotorA();
+      Bluetooth.println("Двжиение направо закончено");
+      Serial.println("Движение направо закончено");
+    }
+  }
 }
